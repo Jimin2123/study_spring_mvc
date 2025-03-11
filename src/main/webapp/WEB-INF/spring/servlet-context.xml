@@ -22,7 +22,7 @@
     <!-- 뷰 매핑 설정-->
     <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <!-- View 이름으로 View를 찾을 때 Controller에서 반환한 View 이름 앞/뒤에 붙여줄 문자로 최종 View의 경로를 만들 때 사용-->
-        <beans:property name="prefix" value="/WEB-INF/views/" />
+        <beans:property name="prefix" value="/views/" />
         <beans:property name="suffix" value=".jsp" />
     </beans:bean>
 </beans:beans>
