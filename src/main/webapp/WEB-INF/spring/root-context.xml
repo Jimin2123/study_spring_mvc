@@ -5,3 +5,11 @@
        https://www.springframework.org/schema/beans/spring-beans.xsd">
     <!-- Root Context: defines shared resources visible to all other web components -->
 </beans>
+
+<!--
+    스프링 애플리케이션 전체에서 공유할 수 있는 루트 컨텍스트 설정파 일의 위치를 지정
+
+    - 공통 빈(Service, Repository(DAO), DB, log 등)을 설정
+    - 주로 View 지원을 제외한 Bean을 설정
+    - <context-param> 요소를 이용하여 설정파일의 위치를 지정
+ -->

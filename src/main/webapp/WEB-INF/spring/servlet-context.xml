@@ -9,11 +9,28 @@
                 http://www.springframework.org/schema/beans/spring-beans.xsd
                 http://www.springframework.org/schema/context
                 http://www.springframework.org/schema/context/spring-context.xsd">
+    <!-- 컨트롤러 매핑 설정: 스프링 컴포넌트를 어노테이션 기반으로 관리하도록 설정-->
     <annotation-driven/>
+
+    <!-- 자바 클래스의 Bean 객체 설정: Bean을 XML에 일일이 선언하지 않고 기준이 되는 패키지 하위의 모든 클래스
+        파일을 검색하여 Bean 객체를 자동 등록-->
     <context:component-scan base-package="com.springmvc.*" />
+
+    <!-- 정적 리소스 파일들을 찾을 기본 경로 설정-->
     <resources mapping="/resources/**" location="/resources/" />
+
+    <!-- 뷰 매핑 설정-->
     <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!-- View 이름으로 View를 찾을 때 Controller에서 반환한 View 이름 앞/뒤에 붙여줄 문자로 최종 View의 경로를 만들 때 사용-->
         <beans:property name="prefix" value="/WEB-INF/views/" />
         <beans:property name="suffix" value=".jsp" />
     </beans:bean>
 </beans:beans>
+
+<!--
+    - DispatcherServlet이 모든 요청을 받을 수 있도록 설정
+    - DispatcherServlet은 요청 URL을 처리할 컨트롤러에 처리를 위임함
+    - <init-param> 요소로 설정 파일의 위치를 지정
+    - <servlet>요소를 이용하여 설정
+    - <servlet-mapping> 요소를 이용하여 DispatcherServlet이 처리할 사용자 요청 URL 패턴을 설정
+-->
