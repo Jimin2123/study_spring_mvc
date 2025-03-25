@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       https://www.springframework.org/schema/beans/spring-beans.xsd">
+       https://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/jdbc
+       http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
     <!-- Root Context: defines shared resources visible to all other web components -->
+
+    <!-- db.properties 를 Spring에서 로드 -->
+    <context:property-placeholder location="classpath:db.properties"/>
+
+    <!-- db.properties 에 설정된 정보로 DataSource 생성 -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${datasource.driverClassName}" />
+        <property name="url" value="${datasource.url}" />
+        <property name="username" value="${datasource.username}" />
+        <property name="password" value="${datasource.password}" />
+    </bean>
+
+    <!-- DataSource를 이용하여 데이터베이스 초기화 -->
+    <jdbc:initialize-database data-source="dataSource">
+        <jdbc:script location="classpath:db/create-db.sql" />
+        <jdbc:script location="classpath:db/insert-data.sql" />
+    </jdbc:initialize-database>
 </beans>
 
 <!--
