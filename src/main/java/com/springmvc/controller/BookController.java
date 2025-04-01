@@ -10,19 +10,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.springmvc.domain.Book;
 import com.springmvc.service.BookService;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@RequestMapping("/books")
 public class BookController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private BookService bookService;
 
-    @RequestMapping(value="/books", method=RequestMethod.GET)
+    @RequestMapping
     public String requestBookList(Model model) {
         this.log.debug("requestBookList");
+
         List<Book> list = bookService.getAllBookList();
         model.addAttribute("bookList", list);
+
         return "books";
+    }
+
+    @RequestMapping("all")
+    public ModelAndView requestAllBook(Model model) {
+        this.log.debug("requestAllBook");
+
+        ModelAndView mav = new ModelAndView();
+
+        List<Book> list = this.bookService.getAllBookList();
+        mav.addObject("bookList", list);
+        mav.setViewName("books");
+
+        return mav;
     }
 }
