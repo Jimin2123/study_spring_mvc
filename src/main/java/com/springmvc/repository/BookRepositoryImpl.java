@@ -18,10 +18,20 @@ public class BookRepositoryImpl implements BookRepository {
     public void setJdbcTemplate(JdbcTemplate template) {
         this.template = template;
     }
+
     @Override
     public List<Book> getAllBookList() {
         String sql = "select b_bookId, b_name, b_unitPrice, b_author, b_description, b_publisher, b_category, b_unitsInStock, b_releaseDate, b_condition from book";
         List<Book> listOfBook = this.template.query(sql, new BookRowMapper());
         return listOfBook;
+    }
+
+    @Override
+    public List<Book> getBookListByCategory(String category) {
+        String sql = "select b_bookId, b_name, b_unitPrice, b_author, b_description, " +
+                "b_publisher, b_category, b_unitsInStock, b_releaseDate, b_condition from book"
+                + " where b_category like concat('%', ?, '%')";
+        List<Book> listOfBooks = this.template.query(sql, new BookRowMapper(), category);
+        return listOfBooks;
     }
 }
