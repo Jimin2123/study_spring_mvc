@@ -10,7 +10,7 @@
                 http://www.springframework.org/schema/context
                 http://www.springframework.org/schema/context/spring-context.xsd">
     <!-- 컨트롤러 매핑 설정: 스프링 컴포넌트를 어노테이션 기반으로 관리하도록 설정-->
-    <annotation-driven/>
+    <annotation-driven enable-matrix-variables="true"/>
 
     <!-- 자바 클래스의 Bean 객체 설정: Bean을 XML에 일일이 선언하지 않고 기준이 되는 패키지 하위의 모든 클래스
         파일을 검색하여 Bean 객체를 자동 등록-->

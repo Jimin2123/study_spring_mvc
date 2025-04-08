@@ -1,11 +1,14 @@
 package com.springmvc.controller;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger; // slf4j란 : 다양한 로깅 프레임워크에 대한 간단한 퍼사드 또는 추상화 역할
 import org.slf4j.LoggerFactory; // SLF4J API를 사용하여 로깅을 수행하는 클래스
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -56,4 +59,15 @@ public class BookController {
 
         return mav;
     }
+
+    @RequestMapping("/filter/{bookFilter}")
+    public String requestBooksByFilter(
+            @MatrixVariable(pathVar="bookFilter") Map<String, List<String>> bookFilter,
+            Model model
+    ) {
+        Set<Book> booksByFilter = this.bookService.getBookListByFilter(bookFilter);
+        model.addAttribute("bookList", booksByFilter);
+        return "books";
+    }
+
 }
