@@ -72,4 +72,19 @@ public class BookRepositoryImpl implements BookRepository {
 
         return booksByCategory;
     }
+
+    @Override
+    public Book getBookById(String bookId) {
+        Book bookInfo = null;
+        String sql = "SELECT count(*) FROM book where b_bookId=?";
+        int rowCount = this.template.queryForObject(sql, Integer.class, bookId);
+        if(rowCount != 0) {
+            sql = "SELECT b_bookId, b_name, b_unitPrice, b_author, b_description, b_publisher, " +
+                    "b_category, b_unitsInStock, b_releaseDate, b_condition FROM book where b_bookId=?";
+            bookInfo = this.template.queryForObject(sql, new BookRowMapper(), bookId);
+        }
+        if(bookInfo == null)
+            throw new IllegalArgumentException("도서 ID가 " + bookId + "인 도서를 찾을 수 없습니다.");
+        return bookInfo;
+    }
 }
