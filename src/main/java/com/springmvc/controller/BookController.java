@@ -8,10 +8,7 @@ import org.slf4j.LoggerFactory; // SLF4J API를 사용하여 로깅을 수행하
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.MatrixVariable;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import com.springmvc.domain.Book;
 import com.springmvc.service.BookService;
 import org.springframework.web.servlet.ModelAndView;
@@ -68,6 +65,13 @@ public class BookController {
         Set<Book> booksByFilter = this.bookService.getBookListByFilter(bookFilter);
         model.addAttribute("bookList", booksByFilter);
         return "books";
+    }
+
+    @GetMapping("/book")
+    public String requestBookById(@RequestParam("id") String bookId, Model model) {
+        Book bookById = this.bookService.getBookById(bookId);
+        model.addAttribute("book", bookById);
+        return "book";
     }
 
 }

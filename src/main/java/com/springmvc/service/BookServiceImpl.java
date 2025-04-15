@@ -28,4 +28,10 @@ public class BookServiceImpl implements BookService {
     public Set<Book> getBookListByFilter(Map<String, List<String>> filter) {
         return this.bookRepository.getBookListByFilter(filter);
     }
+
+    @Override
+    public Book getBookById(String bookId) {
+        Book book = this.bookRepository.getBookById(bookId);
+        return book;
+    }
 }
