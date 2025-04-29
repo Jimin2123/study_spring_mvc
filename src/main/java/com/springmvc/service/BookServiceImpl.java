@@ -34,4 +34,9 @@ public class BookServiceImpl implements BookService {
         Book book = this.bookRepository.getBookById(bookId);
         return book;
     }
+
+    @Override
+    public void setNewBook(Book book) {
+        this.bookRepository.setNewBook(book);
+    }
 }
