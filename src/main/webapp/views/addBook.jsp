@@ -22,6 +22,9 @@
     </div>
 </div>
 <div class="container">
+    <form action="${pageContext.request.contextPath}/logout" method="post">
+        <input type="submit" class="btn btn-sm btn-success" value="Logout"/>
+    </form>
     <%--
     <form:form modelAttribute="book" class="form-horizontal">
     --%>
