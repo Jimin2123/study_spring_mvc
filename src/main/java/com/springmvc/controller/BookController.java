@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory; // SLF4J API를 사용하여 로깅을 수행하
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import com.springmvc.domain.Book;
 import com.springmvc.service.BookService;
@@ -75,8 +76,27 @@ public class BookController {
     }
 
     @GetMapping("/add")
-    public String requestAddBookForm(Book book) {
-        return "addbook";
+    public String requestAddBookForm(@ModelAttribute("NewBook") Book book) {
+        return "addBook";
     }
 
+    // @ModelAttribute : 요청 파라미터를 객체에 바인딩하는 메소드
+    @PostMapping("/add")
+    public String submitAddNewBook(@ModelAttribute("NewBook") Book book) {
+        this.bookService.setNewBook(book);
+        return "redirect:/books";
+    }
+
+    // @ModelAttribute : 모델에 데이터를 추가하는 메소드
+    @ModelAttribute
+    public void addAttributes(Model model) {
+        model.addAttribute("addTitle", "신규 도서 등록");
+    }
+
+    // @InitBinder : 특정 컨트롤러의 요청을 처리하기 전에 바인딩 설정을 초기화하는 메소드
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.setAllowedFields("bookId", "name", "unitPrice", "author", "description", "publisher",
+                "category", "unitsInStock", "releaseDate", "condition");
+    }
 }

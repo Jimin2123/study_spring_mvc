@@ -22,8 +22,21 @@
     </div>
 </div>
 <div class="container">
+    <div class="float-right">
+        <form:form action="${pageContext.request.contextPath}/logout" method="POST">
+            <input type="submit" class="btn btn-sm btn-success" value="Logout" />
+        </form:form>
+    </div>
+    <br/><br/>
+    <%--
     <form:form modelAttribute="book" class="form-horizontal">
+    --%>
+    <%--@elvariable id="NewBook" type=""--%>
+    <form:form modelAttribute="NewBook" class="form-horizontal" >
         <fieldset>
+
+            <legend>${addTitle}</legend>
+
             <div class="form-group row">
                 <label class="col-sm-2 control-label">도서 ID</label>
                 <div class="col-sm-3">
