@@ -3,9 +3,9 @@
              xmlns:beans="http://www.springframework.org/schema/beans"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://www.springframework.org/schema/beans
-http://www.springframework.org/schema/beans/spring-beans.xsd
-http://www.springframework.org/schema/security
-http://www.springframework.org/schema/security/spring-security.xsd">
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/security
+            http://www.springframework.org/schema/security/spring-security.xsd">
     <http use-expressions="true">
         <intercept-url pattern="/books/add" access="hasAuthority('ROLE_ADMIN')" />
         <intercept-url pattern="/**" access="permitAll" />
@@ -19,12 +19,22 @@ http://www.springframework.org/schema/security/spring-security.xsd">
         <logout logout-success-url="/logout" />
     </http>
     <authentication-manager>
-        <authentication-provider>
-            <user-service>
-                <user name="Admin" password="{noop}Admin1234" authorities="ROLE_ADMIN" />
-            </user-service>
+        <authentication-provider user-service-ref="customUserService">
+            <password-encoder ref="customPasswordEncoder" />
         </authentication-provider>
     </authentication-manager>
+
+    <beans:bean id="customUserService"
+                class="com.springmvc.service.CustomUserDetailService" />
+    <beans:bean id="customPasswordEncoder"
+                class="com.springmvc.service.CustomPasswordEncoder" />
+<!--    <authentication-manager>-->
+<!--        <authentication-provider>-->
+<!--            <user-service>-->
+<!--                <user name="Admin" password="{noop}Admin1234" authorities="ROLE_ADMIN" />-->
+<!--            </user-service>-->
+<!--        </authentication-provider>-->
+<!--    </authentication-manager>-->
     <beans:bean id="mvcHandlerMappingIntrospector"
                 class="org.springframework.web.servlet.handler.HandlerMappingIntrospector" />
 </beans:beans>
