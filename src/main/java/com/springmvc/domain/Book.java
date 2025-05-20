@@ -1,5 +1,7 @@
 package com.springmvc.domain;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Objects;
 
 public class Book {
@@ -13,6 +15,9 @@ public class Book {
     private String condition;
     private long unitsInStock;
     private int unitPrice;
+    private String fileName;
+
+    private MultipartFile bookImage;
 
     public Book() {
 
@@ -88,6 +93,14 @@ public class Book {
         this.condition = condition;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
     public long getUnitsInStock() {
         return unitsInStock;
     }
@@ -108,11 +121,11 @@ public class Book {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return unitsInStock == book.unitsInStock && unitPrice == book.unitPrice && Objects.equals(bookId, book.bookId) && Objects.equals(name, book.name) && Objects.equals(author, book.author) && Objects.equals(publisher, book.publisher) && Objects.equals(description, book.description) && Objects.equals(category, book.category) && Objects.equals(releaseDate, book.releaseDate) && Objects.equals(condition, book.condition);
+        return unitsInStock == book.unitsInStock && unitPrice == book.unitPrice && Objects.equals(bookId, book.bookId) && Objects.equals(name, book.name) && Objects.equals(author, book.author) && Objects.equals(publisher, book.publisher) && Objects.equals(description, book.description) && Objects.equals(category, book.category) && Objects.equals(releaseDate, book.releaseDate) && Objects.equals(condition, book.condition) && Objects.equals(fileName, book.fileName) && Objects.equals(bookImage, book.bookImage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bookId, name, author, publisher, description, category, releaseDate, condition, unitsInStock, unitPrice);
+        return Objects.hash(bookId, name, author, publisher, description, category, releaseDate, condition, unitsInStock, unitPrice, fileName, bookImage);
     }
 }

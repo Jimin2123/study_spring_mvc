@@ -22,8 +22,9 @@ public class BookRowMapper implements RowMapper<Book> {
         book.setPublisher(rs.getString("b_publisher"));
         book.setCategory(rs.getString("b_category"));
         book.setUnitsInStock(rs.getLong("b_unitsInStock"));
-        book.setCondition(rs.getString("b_condition"));
         book.setReleaseDate(rs.getString("b_releaseDate"));
+        book.setCondition(rs.getString("b_condition"));
+        book.setFileName(rs.getString("b_fileName"));
 
         return book;
     }
