@@ -6,6 +6,16 @@
         <Console name="console">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{-10}:%L - %m%n"/>
         </Console>
+
+        <RollingFile name="monitor" fileName="/Users/Jimin/webjavaapp/2021136056/logs/monitor.log"
+                     filePattern="/Users/Jimin/webjavaapp/2021136056/logs/monitor.%d{yyyy-MM-dd-hh-mm}.log">
+            <LevelRangeFilter minLevel="DEBUG" maxLevel="DEBUG"/>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{-10}:%L - %m%n" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10KB"/>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="INFO" additivity="false">
@@ -17,7 +27,8 @@
         <Logger name="org.springframework.web" level="DEBUG"/>
         <Logger name="org.springframework.security" level="DEBUG"/>
         <Logger name="org.springframework.jdbc" level="DEBUG"/>
-        <Logger name="com.springmvc" level="DEBUG"/>
-
+        <Logger name="com.springmvc" level="DEBUG" >
+            <AppenderRef ref="monitor" />
+        </Logger>
     </Loggers>
 </Configuration>
