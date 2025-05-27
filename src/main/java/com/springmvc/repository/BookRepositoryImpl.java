@@ -1,6 +1,7 @@
 package com.springmvc.repository;
 
 import com.springmvc.domain.Book;
+import com.springmvc.exception.BookIdException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -83,8 +84,9 @@ public class BookRepositoryImpl implements BookRepository {
                     "b_category, b_unitsInStock, b_releaseDate, b_condition, b_fileName FROM book where b_bookId=?";
             bookInfo = this.template.queryForObject(sql, new BookRowMapper(), bookId);
         }
-        if(bookInfo == null)
-            throw new IllegalArgumentException("도서 ID가 " + bookId + "인 도서를 찾을 수 없습니다.");
+        if(bookInfo == null) {
+            throw new BookIdException(bookId);
+        }
         return bookInfo;
     }
 

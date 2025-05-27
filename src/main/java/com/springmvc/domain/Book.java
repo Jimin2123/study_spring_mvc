@@ -117,6 +117,10 @@ public class Book {
         this.unitPrice = unitPrice;
     }
 
+    public MultipartFile getBookImage() {
+        return bookImage;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
