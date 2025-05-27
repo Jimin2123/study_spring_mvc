@@ -25,6 +25,7 @@
     <div class="row" align="center">
       <c:forEach items="${bookList}" var="book">
         <div class="col-md-4">
+          <img src="<c:url value="/bookimage/${book.fileName}" />" style="width:60%" />
           <h3>${book.name}</h3>
           <p>${book.author}
             <br> ${book.publisher} | ${book.releaseDate}

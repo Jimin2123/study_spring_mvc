@@ -1,17 +1,23 @@
 package com.springmvc.controller;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.springmvc.exception.BookIdException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger; // slf4j란 : 다양한 로깅 프레임워크에 대한 간단한 퍼사드 또는 추상화 역할
 import org.slf4j.LoggerFactory; // SLF4J API를 사용하여 로깅을 수행하는 클래스
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import com.springmvc.domain.Book;
 import com.springmvc.service.BookService;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -21,6 +27,9 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
+
+    @Value("${uploadPath}")
+    private String uploadPath;
 
     @RequestMapping
     public String requestBookList(Model model) {
@@ -83,6 +92,18 @@ public class BookController {
     // @ModelAttribute : 요청 파라미터를 객체에 바인딩하는 메소드
     @PostMapping("/add")
     public String submitAddNewBook(@ModelAttribute("NewBook") Book book) {
+        MultipartFile bookImage = book.getBookImage();
+
+        if(bookImage != null && !bookImage.isEmpty()) {
+            String saveName = bookImage.getOriginalFilename();
+            File saveFile = new File(this.uploadPath, saveName);
+            try {
+                bookImage.transferTo(saveFile);
+                book.setFileName(saveName);
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
         this.bookService.setNewBook(book);
         return "redirect:/books";
     }
@@ -97,6 +118,17 @@ public class BookController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.setAllowedFields("bookId", "name", "unitPrice", "author", "description", "publisher",
-                "category", "unitsInStock", "releaseDate", "condition");
+                "category", "unitsInStock", "releaseDate", "condition", "bookImage");
+    }
+
+    @ExceptionHandler(value= {BookIdException.class})
+    public ModelAndView handlerException(HttpServletRequest req
+            , BookIdException exception) {
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("invalidBookId", exception.getBookId());
+        mav.addObject("exception", exception);
+        mav.addObject("url", req.getRequestURL() + "?" + req.getQueryString());
+        mav.setViewName("errorBook");
+        return mav;
     }
 }

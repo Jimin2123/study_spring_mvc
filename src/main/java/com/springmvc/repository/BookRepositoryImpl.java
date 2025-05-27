@@ -1,6 +1,7 @@
 package com.springmvc.repository;
 
 import com.springmvc.domain.Book;
+import com.springmvc.exception.BookIdException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -20,7 +21,7 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> getAllBookList() {
-        String sql = "select b_bookId, b_name, b_unitPrice, b_author, b_description, b_publisher, b_category, b_unitsInStock, b_releaseDate, b_condition from book";
+        String sql = "select b_bookId, b_name, b_unitPrice, b_author, b_description, b_publisher, b_category, b_unitsInStock, b_releaseDate, b_condition, b_fileName from book";
         List<Book> listOfBook = this.template.query(sql, new BookRowMapper());
         return listOfBook;
     }
@@ -28,7 +29,7 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public List<Book> getBookListByCategory(String category) {
         String sql = "select b_bookId, b_name, b_unitPrice, b_author, b_description, " +
-                "b_publisher, b_category, b_unitsInStock, b_releaseDate, b_condition from book"
+                "b_publisher, b_category, b_unitsInStock, b_releaseDate, b_condition, b_fileName from book"
                 + " where b_category like concat('%', ?, '%')";
         List<Book> listOfBooks = this.template.query(sql, new BookRowMapper(), category);
         return listOfBooks;
@@ -49,7 +50,7 @@ public class BookRepositoryImpl implements BookRepository {
                 String publisherName = filter.get("publisher").get(j);
                 // 출판사명이 포함된 도서들을 조회
                 String SQL = "SELECT b_bookId, b_name, b_unitPrice, b_author, b_description, " +
-                        "b_publisher, b_category, b_unitsInStock, b_releaseDate, b_condition FROM book "
+                        "b_publisher, b_category, b_unitsInStock, b_releaseDate, b_condition, b_fileName FROM book "
                         + "where b_publisher LIKE '%' || ? || '%'";
                 booksByPublisher.addAll(this.template.query(SQL, new BookRowMapper(), publisherName));
             }
@@ -61,7 +62,7 @@ public class BookRepositoryImpl implements BookRepository {
                 String categoryName = filter.get("category").get(i);
                 // 카테고리명이 포함된 도서들을 조회
                 String sql = "select b_bookId, b_name, b_unitPrice, b_author, b_description, " +
-                        "b_publisher, b_category, b_unitsInStock, b_releaseDate, b_condition from book "
+                        "b_publisher, b_category, b_unitsInStock, b_releaseDate, b_condition, b_fileName from book "
                         + "where b_category like concat('%', ?, '%')";
                 booksByCategory.addAll(template.query(sql, new BookRowMapper(), categoryName));
             }
@@ -80,11 +81,12 @@ public class BookRepositoryImpl implements BookRepository {
         int rowCount = this.template.queryForObject(sql, Integer.class, bookId);
         if(rowCount != 0) {
             sql = "SELECT b_bookId, b_name, b_unitPrice, b_author, b_description, b_publisher," +
-                    "b_category, b_unitsInStock, b_releaseDate, b_condition FROM book where b_bookId=?";
+                    "b_category, b_unitsInStock, b_releaseDate, b_condition, b_fileName FROM book where b_bookId=?";
             bookInfo = this.template.queryForObject(sql, new BookRowMapper(), bookId);
         }
-        if(bookInfo == null)
-            throw new IllegalArgumentException("도서 ID가 " + bookId + "인 도서를 찾을 수 없습니다.");
+        if(bookInfo == null) {
+            throw new BookIdException(bookId);
+        }
         return bookInfo;
     }
 
@@ -92,11 +94,11 @@ public class BookRepositoryImpl implements BookRepository {
     public void setNewBook(Book book) {
         String sql = "INSERT INTO book (b_bookId, b_name, b_unitPrice, b_author, "
                 + " b_description, b_publisher, b_category, b_unitsInStock, "
-                + " b_releaseDate, b_condition) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + " b_releaseDate, b_condition, b_fileName) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
 
         this.template.update(sql, book.getBookId(), book.getName(), book.getUnitPrice(),
                 book.getAuthor(), book.getDescription(), book.getPublisher(),
                 book.getCategory(), book.getUnitsInStock(), book.getReleaseDate(),
-                book.getCondition());
+                book.getCondition(), book.getFileName());
     }
 }

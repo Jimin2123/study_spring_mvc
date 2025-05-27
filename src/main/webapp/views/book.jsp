@@ -21,6 +21,9 @@
 </div>
 <div class="container">
     <div class="row">
+        <div class="col-md-4">
+            <img src="<c:url value="/bookimage/${book.fileName}" />" style="width:50%" />
+        </div>
         <div class="col-md-12">
             <h3>${book.name}</h3>
             <p>${book.description}</p>
